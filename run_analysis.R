@@ -58,4 +58,4 @@ TD <- mdata %>% select(SubId, activityId, contains("mean"), contains("std"))
 secTD <- aggregate(. ~activityId + SubId, TD, mean) 
 secTD <- secTD[order(secTD$SubId, secTD$activityId),]
 ##Generating the txt with the secondary Tidydata
-write.table(secTidySet, "Analysis.txt", row.name=FALSE)
+write.table(secTD, "Analysis.txt", row.name=FALSE)
