@@ -48,14 +48,17 @@ S <- rbind(subtrain, subtest)
 mdata <- cbind(S,Y,X)
 ##replacing the activity ID for the activity Name
 mdata$activityId <- activity[mdata$activityId, 2]
+
+##getting mean, std which are required to this assignment
+TD <- mdata %>% select(SubId, activityId, contains("Mean"), contains("STD"))
+
 ##Using appropriately labels the data set with descriptive variable names
 library(mgsub)
-TD <- mgsub(names(TidyData), c("BodyBody", "-mean()", "-std()", "-freq()"), c("Body", "Mean","STD","Frequency"))
-##getting mean, std which are required to this assignment
-TD <- mdata %>% select(SubId, activityId, contains("mean"), contains("std"))
+names(TD) <- mgsub(names(TD), c("BodyBody", "-mean()", "-std()", "-freq()", "\\()"), c("Body", "Mean","STD","Frequency",""))
+
 ## sec tidy data set with the average of each variable for each activity
 ##In general, the tilde (‘~’) separates the left side of a formula with the right side of the formula.
-secTD <- aggregate(. ~activityId + SubId, TD, mean) 
+secTD <- aggregate(. ~ SubId + activityId, TD, mean, na.action=na.pass) 
 secTD <- secTD[order(secTD$SubId, secTD$activityId),]
 ##Generating the txt with the secondary Tidydata
 write.table(secTD, "Analysis.txt", row.name=FALSE)
