@@ -22,3 +22,4 @@ features <- read.table("UCI HAR Dataset/features.txt", header = FALSE)
 subtest <- read.table("UCI HAR Dataset/test/subject_test.txt", header = FALSE)
 unique(subtest, incomparables = FALSE) ## identified unique codes for subject_test table [1] "2"  "4"  "9"  "10" "12" "13" "18" "20" "24"
 
+
