@@ -22,7 +22,7 @@ features <- read.table("UCI HAR Dataset/features.txt", header = FALSE)
 subtest <- read.table("UCI HAR Dataset/test/subject_test.txt", header = FALSE)
 lapply(subtest,unique) ## identified unique codes for subject_test table [1] "2"  "4"  "9"  "10" "12" "13" "18" "20" "24"
 xtest <- read.table("UCI HAR Dataset/test/x_test.txt", header = FALSE) ## info
-test <- read.table("UCI HAR Dataset/test/y_test.txt", header = FALSE)  ## activity id
+ytest <- read.table("UCI HAR Dataset/test/y_test.txt", header = FALSE)  ## activity id
 lapply(ytest, unique) ##checking unique codes for y_test list was 5 4 6 1 3 2
 ##reading train data
 subtrain <- read.table("UCI HAR Dataset/train/subject_train.txt", header = FALSE)
@@ -31,4 +31,11 @@ xtrain <- read.table("UCI HAR Dataset/train/x_train.txt", header = FALSE) ## inf
 ytrain <- read.table("UCI HAR Dataset/train/y_train.txt", header = FALSE)  ## activity id
 lapply(ytrain, unique) ##checking unique codes for y_test list was 5 4 6 1 3 2
 
-
+library(data.table) ##to use setnames fuction
+xtrain <- setnames(xtrain, features[,2])
+ytrain <- setnames(ytrain, "activityId")
+subtrain <- setnames(subtrain, "TrainId")
+xtest <- setnames(xtest, features[,2])
+ytest <- setnames(ytest, "activityId")
+subtest <- setnames(subtest, "TrainId")
+activity <- setnames(activity, old = c('V1','V2'), new = c('actId','actName'))
