@@ -59,3 +59,5 @@ secTD <- aggregate(. ~activityId + SubId, TD, mean)
 secTD <- secTD[order(secTD$SubId, secTD$activityId),]
 ##Generating the txt with the secondary Tidydata
 write.table(secTD, "Analysis.txt", row.name=FALSE)
+##you can use this to view the table on R
+##View(secTD)
