@@ -32,10 +32,24 @@ ytrain <- read.table("UCI HAR Dataset/train/y_train.txt", header = FALSE)  ## ac
 lapply(ytrain, unique) ##checking unique codes for y_test list was 5 4 6 1 3 2
 
 library(data.table) ##to use setnames fuction
+##Uses descriptive activity names to name the activities in the data set
 xtrain <- setnames(xtrain, features[,2])
 ytrain <- setnames(ytrain, "activityId")
-subtrain <- setnames(subtrain, "TrainId")
+subtrain <- setnames(subtrain, "SubId")
 xtest <- setnames(xtest, features[,2])
 ytest <- setnames(ytest, "activityId")
-subtest <- setnames(subtest, "TrainId")
-activity <- setnames(activity, old = c('V1','V2'), new = c('actId','actName'))
+subtest <- setnames(subtest, "SubId")
+activity <- setnames(activity, old = c('V1','V2'), new = c('activityId','actName'))
+
+#mergin tables
+X <- rbind(xtrain, xtest)
+Y <- rbind(ytrain, ytest)
+S <- rbind(subtrain, subtest)
+mdata <- cbind(S,Y,X)
+##replacing the activity ID for the activity Name
+mdata$activityId <- activity[mdata$activityId, 2]
+##getting mean, std which are required to this assignment
+TD <- mdata %>% select(SubId, activityId, contains("mean"), contains("std"))
+## sec tidy data set with the average of each variable for each activity
+secTD <- aggregate(. ~activityId + SubId, TD, mean)
+secTD <- secTD[order(secTD$SubId, secTD$activityId),]
