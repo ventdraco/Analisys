@@ -20,13 +20,13 @@ features <- read.table("UCI HAR Dataset/features.txt", header = FALSE)
 ##features_info contain info about features table, not necessary for this assignment
 ## reading test data
 subtest <- read.table("UCI HAR Dataset/test/subject_test.txt", header = FALSE)
-lapply(subtest,unique) ## identified unique codes for subject_test table [1] "2"  "4"  "9"  "10" "12" "13" "18" "20" "24"
+lapply(subtest,unique) ## identified unique codes for subject_test table "2"  "4"  "9"  "10" "12" "13" "18" "20" "24"
 xtest <- read.table("UCI HAR Dataset/test/x_test.txt", header = FALSE) ## info
 ytest <- read.table("UCI HAR Dataset/test/y_test.txt", header = FALSE)  ## activity id
 lapply(ytest, unique) ##checking unique codes for y_test list was 5 4 6 1 3 2
 ##reading train data
 subtrain <- read.table("UCI HAR Dataset/train/subject_train.txt", header = FALSE)
-lapply(subtrain,unique) ## identified unique codes for subject_train table [1]  1  3  5  6  7  8 11 14 15 16 17 19 21 22 23 25 26 27 28 29 30
+lapply(subtrain,unique) ## identified unique codes for subject_train table 1  3  5  6  7  8 11 14 15 16 17 19 21 22 23 25 26 27 28 29 30
 xtrain <- read.table("UCI HAR Dataset/train/x_train.txt", header = FALSE) ## info
 ytrain <- read.table("UCI HAR Dataset/train/y_train.txt", header = FALSE)  ## activity id
 lapply(ytrain, unique) ##checking unique codes for y_test list was 5 4 6 1 3 2
@@ -48,8 +48,14 @@ S <- rbind(subtrain, subtest)
 mdata <- cbind(S,Y,X)
 ##replacing the activity ID for the activity Name
 mdata$activityId <- activity[mdata$activityId, 2]
+##Using appropriately labels the data set with descriptive variable names
+library(mgsub)
+TD <- mgsub(names(TidyData), c("BodyBody", "-mean()", "-std()", "-freq()"), c("Body", "Mean","STD","Frequency"))
 ##getting mean, std which are required to this assignment
 TD <- mdata %>% select(SubId, activityId, contains("mean"), contains("std"))
 ## sec tidy data set with the average of each variable for each activity
-secTD <- aggregate(. ~activityId + SubId, TD, mean)
+##In general, the tilde (‘~’) separates the left side of a formula with the right side of the formula.
+secTD <- aggregate(. ~activityId + SubId, TD, mean) 
 secTD <- secTD[order(secTD$SubId, secTD$activityId),]
+##Generating the txt with the secondary Tidydata
+write.table(secTidySet, "Analysis.txt", row.name=FALSE)
